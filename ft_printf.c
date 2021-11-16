@@ -6,7 +6,7 @@
 /*   By: vsedat <vsedat@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/15 13:15:18 by vsedat            #+#    #+#             */
-/*   Updated: 2021/11/15 18:30:51 by vsedat           ###   ########lyon.fr   */
+/*   Updated: 2021/11/16 14:35:14 by vsedat           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,15 @@ int	skip_spaces(const char *p, int i)
 	return (i);
 }
 
+int	is_principal(char flag)
+{
+	if (flag == 's' || flag == 'd' || flag == 'b' || flag == 'S' || flag == 'o'
+		|| flag == 'X' || flag == 'x' || flag == 'u' || flag == 'c'
+		|| flag == 'p' || flag == '%')
+		return (1);
+	return (0);
+}
+
 int	ft_strlen(const char *s)
 {
 	int	i;
@@ -40,8 +49,8 @@ int	ft_strlen(const char *s)
 int	multipleflags(char *chain)
 {
 	int	i;
-	int	nbflag;
-	
+	int	nbflags;
+
 	i = 0;
 	nbflags = 0;
 	while (chain[i])
@@ -59,15 +68,19 @@ int	isvalid(char *chain)
 	i = ft_strlen(chain) - 1;
 	while (i > 0)
 	{
-		if (chain[i] == 's' || chain[i] == 'd' || chain[i] == 'b' || chain[i] == 'S' || chain[i] == 'o' || chain[i] == 'X' 
-			|| chain[i] == 'x' || chain[i] == 'u' || chain[i] == 'c' || chain[i] == 'p' || chain[i] == '%')
+		if (is_principal(chain[i]) == 1)
 			i--;
 		while (chain[i] >= '0' && chain[i] <= '9')
 			i--;
-		while (chain[i] == '-' || chain[i] == '0' || chain[i] == '.' || chain[i] == '#' || chain[i] == ' ' || chain[i] == '+')
+		if (chain[i] == '-')
+			return (0);
+		while (chain[i] == '-' || chain[i] == '0' || chain[i] == '.'
+			|| chain[i] == '#' || chain[i] == ' ' || chain[i] == '+')
 			i--;
-		
-		
+		if (chain[i] == '%')
+			return (1);
+		else
+			return (0);
 	}
 }
 
@@ -84,16 +97,21 @@ char	*expression(const char *p, int start, int end)
 		i++;
 	}
 	chain[i] = 0;
-	return (chain);
+	if (isvalid(chain) == 1)
+		return (chain);
+	else
+		return (0);
 }
 
 int	ft_printf(const char *p, ...)
 {
-	int	nbprint;
-	int	i;
-	int	start;
-	int	end;
+	va_list	va;
+	int		nbprint;
+	int		i;
+	int		start;
+	int		end;
 
+	va_start(va, p);
 	i = 0;
 	nbprint = 0;
 	while (p[i])
@@ -101,8 +119,7 @@ int	ft_printf(const char *p, ...)
 		if (p[i] == '%')
 		{
 			start = i;
-			while (p[i] != 's' && p[i] != 'd' && p[i] != 'b' && p[i] != 'S' && p[i] != 'o'
-				&& p[i] != 'x' && p[i] != 'u' && p[i] != 'c' && p[i] != 'p' && p[i] != '%' && p[i] != 0)
+			while (is_principal(p[i]))
 				i++;
 			end = i;
 			expression(p, start, end);
