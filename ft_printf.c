@@ -6,7 +6,7 @@
 /*   By: vsedat <vsedat@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/15 13:15:18 by vsedat            #+#    #+#             */
-/*   Updated: 2021/11/16 14:35:14 by vsedat           ###   ########lyon.fr   */
+/*   Updated: 2021/11/16 14:43:05 by vsedat           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,10 +119,20 @@ int	ft_printf(const char *p, ...)
 		if (p[i] == '%')
 		{
 			start = i;
-			while (is_principal(p[i]))
+			while (is_principal(p[i]) == 0)
 				i++;
 			end = i;
-			expression(p, start, end);
+			if (expression(p, start, end) == 0)
+			{
+				i = start;
+				ft_putchar_fd(p[i], 1);
+				i++;
+			}
+			else
+			{
+				fonciton_de_valentin(expression(p, start, end));
+				i++;
+			}
 		}
 		else
 		{
