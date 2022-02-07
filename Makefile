@@ -6,7 +6,7 @@
 #    By: vsedat <vsedat@student.42lyon.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/11/25 15:08:55 by vsedat            #+#    #+#              #
-#    Updated: 2022/02/07 10:06:43 by vsedat           ###   ########lyon.fr    #
+#    Updated: 2022/02/07 11:05:18 by vsedat           ###   ########lyon.fr    #
 #                                                                              #
 # **************************************************************************** #
 
@@ -75,6 +75,7 @@ SOURCES	=	ft_printf.c	\
 all: 	${NAME}
 
 $(OBJ_PATH)/%.o: $(SRC_PATH)/%.c $(HEADER) Makefile
+			@mkdir -p objs
 			@echo "$(BLUE)$(UNDERLINE)Compiling:$(END)$(CYAN) $<"
 			@${CC} ${CFLAGS} -c $< -o $@
 
